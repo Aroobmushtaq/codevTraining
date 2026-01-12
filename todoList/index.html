@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="container d-flex flex-column align-items-center mt-5">
+  <h1>Todo List</h1>
+  <div class="w-100 border p-4 rounded shadow mb-3" style="max-width: 500px; background-color: #f8f9fa;" >
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Title</label>
+    <input type="email" class="form-control" id="todoTitle" placeholder="Enter Title">
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">Location</label>
+    <input type="email" class="form-control" id="todoLocation" placeholder="Enter Location">
+  </div>
+  <div class="mb-3">
+    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+    <textarea class="form-control" id="todoDescription" rows="3"></textarea>
+  </div>
+
+  <button type="button" id="addBtn" class="btn btn-success mb-3" onclick="addtodo()">Add Todo</button>
+</div>
+  <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="todoList">
+           
+        </tbody>
+    </table>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="todo.js"></script>
+
+</body>
+
+</html>
