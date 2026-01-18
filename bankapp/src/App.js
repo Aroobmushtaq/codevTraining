@@ -7,7 +7,6 @@ import Transactions from './pages/transactions/Transactions';
 import Account from './pages/account/Account';
 import MainLayout from './components/MainLayout';
 import CreateAccount from './components/CreateAccount';
-import ViewAccount from './components/ViewAccount';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -34,7 +33,6 @@ function App() {
         <Route path='/transactions' element={<MainLayout><Transactions /></MainLayout>} />
         <Route path='/account' element={<MainLayout><Account /></MainLayout>} />
         <Route path='/createAccount' element={<MainLayout><CreateAccount /></MainLayout>} />
-        <Route path='/viewAccount' element={<MainLayout><ViewAccount /></MainLayout>} />
       </Routes>
     </BrowserRouter>
   );

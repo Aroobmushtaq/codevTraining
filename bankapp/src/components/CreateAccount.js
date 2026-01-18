@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { db, auth } from '../firebase/config';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import React, { useState } from 'react';
+// import { db, auth } from '../firebase/config';
+// import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { UserIcon, IdentificationIcon, BanknotesIcon, KeyIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
@@ -14,27 +14,27 @@ function CreateAccount() {
     balance: "",
   });
 
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const dashboard = () => {
     navigate('/');
   }
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+  //     setUser(currentUser);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async () => {
-    if (!user) {
-      toast.error("You must be logged in to create an account!");
-      return;
-    }
+    // if (!user) {
+    //   toast.error("You must be logged in to create an account!");
+    //   return;
+    // }
 
     // Validation
     if (!form.fullName || !form.cnic || !form.branchCode || !form.accountNumber || !form.accountType || !form.balance) {
@@ -66,16 +66,33 @@ function CreateAccount() {
     }
 
     try {
-      await addDoc(collection(db, "accounts"), {
-        userId: user.uid,
+      // await addDoc(collection(db, "accounts"), {
+      //   userId: user.uid,
+      //   fullName: form.fullName,
+      //   cnic: form.cnic,
+      //   branchCode: branchCodeNum,
+      //   accountNumber: form.accountNumber,
+      //   accountType: form.accountType,
+      //   balance: balanceNum,
+      //   registeredAt: serverTimestamp(),
+      // });
+      const existingAccounts =
+        JSON.parse(localStorage.getItem("accounts")) || [];
+      const newAccount = {
+        id: Date.now(),
         fullName: form.fullName,
         cnic: form.cnic,
         branchCode: branchCodeNum,
         accountNumber: form.accountNumber,
         accountType: form.accountType,
         balance: balanceNum,
-        registeredAt: serverTimestamp(),
-      });
+        createdAt: new Date().toISOString(),
+      };
+
+      localStorage.setItem(
+        "accounts",
+        JSON.stringify([...existingAccounts, newAccount])
+      );
 
       console.log("Account created successfully!");
       setForm({
@@ -191,22 +208,14 @@ function CreateAccount() {
             />
           </div>
         </div>
-<div className="flex justify-between mt-6">
-        {/* Submit Button */}
-        <button
-          type="button"
-          onClick={handleSubmit}
-          className="w-40  bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-500 transition font-semibold"
-        >
-          Create Account
-        </button>
-        <button
-          type="button"
-          onClick={dashboard}
-          className="w-40 bg-red-600 text-white py-3 rounded-xl hover:bg-red-500 transition font-semibold"
-        >
-          Back to Dashboard
-        </button>
+        <div className="flex justify-end mt-6">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            className="w-40 bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-500 transition font-semibold"
+          >
+           Create Account
+          </button>
         </div>
       </form>
     </div>

@@ -1,46 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from '../../firebase/config';
+// import { auth, db } from '../../firebase/config';
 import { UserIcon, ArrowsRightLeftIcon } from '@heroicons/react/24/outline';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+// import { collection, query, where, getDocs } from 'firebase/firestore';
 
 function Home() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [accounts, setAccounts] = useState(0);
 
   // Listen to auth state
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      setUser(currentUser);
-    });
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+  //     setUser(currentUser);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   // Fetch accounts whenever user changes
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      if (!user) return;
-      try {
-        const accountsRef = collection(db, 'accounts');
-        const q = query(accountsRef, where('userId', '==', user.uid));
-        const querySnapshot = await getDocs(q);
-        setAccounts(querySnapshot.size);
-      } catch (error) {
-        console.error('Error fetching accounts:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchAccounts = async () => {
+  //     if (!user) return;
+  //     try {
+  //       const accountsRef = collection(db, 'accounts');
+  //       const q = query(accountsRef, where('userId', '==', user.uid));
+  //       const querySnapshot = await getDocs(q);
+  //       setAccounts(querySnapshot.size);
+  //     } catch (error) {
+  //       console.error('Error fetching accounts:', error);
+  //     }
+  //   };
 
-    fetchAccounts();
-  }, [user]);
+  //   fetchAccounts();
+  // }, [user]);
 
-  if (!user) {
-    return (
-      <h1 className="text-center mt-20 text-xl font-semibold">
-        Please log in to access your dashboard.
-      </h1>
-    );
-  }
+  // if (!user) {
+  //   return (
+  //     <h1 className="text-center mt-20 text-xl font-semibold">
+  //       Please log in to access your dashboard.
+  //     </h1>
+  //   );
+  // }
+useEffect(() => {
+  const storedAccounts =
+    JSON.parse(localStorage.getItem('accounts')) || [];
+
+  setAccounts(storedAccounts.length);
+}, []);
 
   return (
     <div className="py-14">
