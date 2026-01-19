@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-// import { db, auth } from '../firebase/config';
-// import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { UserIcon, IdentificationIcon, BanknotesIcon, KeyIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
@@ -14,29 +12,12 @@ function CreateAccount() {
     balance: "",
   });
 
-  // const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const dashboard = () => {
-    navigate('/');
-  }
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-  //     setUser(currentUser);
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
-
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async () => {
-    // if (!user) {
-    //   toast.error("You must be logged in to create an account!");
-    //   return;
-    // }
-
-    // Validation
     if (!form.fullName || !form.cnic || !form.branchCode || !form.accountNumber || !form.accountType || !form.balance) {
       toast.error("All fields are required");
       return;
@@ -66,16 +47,6 @@ function CreateAccount() {
     }
 
     try {
-      // await addDoc(collection(db, "accounts"), {
-      //   userId: user.uid,
-      //   fullName: form.fullName,
-      //   cnic: form.cnic,
-      //   branchCode: branchCodeNum,
-      //   accountNumber: form.accountNumber,
-      //   accountType: form.accountType,
-      //   balance: balanceNum,
-      //   registeredAt: serverTimestamp(),
-      // });
       const existingAccounts =
         JSON.parse(localStorage.getItem("accounts")) || [];
       const newAccount = {

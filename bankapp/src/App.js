@@ -9,7 +9,6 @@ import MainLayout from './components/MainLayout';
 import CreateAccount from './components/CreateAccount';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 function App() {
   return (
     <BrowserRouter>
