@@ -1,0 +1,10 @@
+const express = require('express');
+const app = express();
+const cors = require('cors');
+app.use(cors());
+const authRoutes = require('./routes/auth');
+const todoRoutes = require('./routes/todo');
+app.use(express.json());
+app.use('/auth', authRoutes);
+app.use('/todo', todoRoutes);
+module.exports = app;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { toast } from 'react-toastify';
+import {UserIcon, ArrowLeftIcon, UserPlusIcon, TrashIcon, ArrowUpTrayIcon, ArrowDownTrayIcon  } from "@heroicons/react/24/outline";
 function Account() {
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [openModal, setOpenModal] = useState(false);
@@ -32,7 +33,7 @@ const saveTransaction = (txn) => {
 
   
 const handleDeposit = () => {
-  if (!depositAmount || Number(depositAmount) <= 0) return alert("Enter a valid amount");
+  if (!depositAmount || Number(depositAmount) <= 0) return toast.error("Enter a valid amount");
 
   const updatedAccounts = accounts.map(acc => {
     if (acc.id === selectedAccount.id) {
@@ -53,7 +54,7 @@ const handleDeposit = () => {
         description: depositDescription || "Deposit",
         createdAt: new Date().toISOString()
       });
-
+toast.success("Deposit successful");
       return updatedAccount;
     }
     return acc;
@@ -70,8 +71,8 @@ const handleDeposit = () => {
 
   // Withdraw function
   const handleWithdraw = () => {
-  if (!withdrawAmount || Number(withdrawAmount) <= 0) return alert("Enter a valid amount");
-  if (Number(withdrawAmount) > selectedAccount.balance) return alert("Insufficient balance");
+  if (!withdrawAmount || Number(withdrawAmount) <= 0) return toast.error("Enter a valid amount");
+  if (Number(withdrawAmount) > selectedAccount.balance) return toast.error("Insufficient balance");
 
   const updatedAccounts = accounts.map(acc => {
     if (acc.id === selectedAccount.id) {
@@ -92,7 +93,8 @@ const handleDeposit = () => {
         description: withdrawDescription || "Withdraw",
         createdAt: new Date().toISOString()
       });
-
+toast.success("Withdraw successful");
+      
       return updatedAccount;
     }
     return acc;
@@ -108,24 +110,26 @@ const handleDeposit = () => {
 
 
   return (
-    <div className="pt-20 px-4 max-w-6xl mx-auto space-y-6">
+    <div className="pt-4 px-4 max-w-6xl mx-auto space-y-6 shadow-2xl mt-8">
 
       {/* Top Buttons */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
-        <button onClick={home} className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500 transition">
+        <button onClick={home} className="px-2 text-[15px] bg-red-600 text-white rounded-lg hover:bg-red-500 transition">
+          <ArrowLeftIcon className="h-5 w-5 inline-block mr-2" />
           Back to Dashboard
         </button>
-        <button onClick={handleCreateAccount} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition">
+        <button onClick={handleCreateAccount} className="px-2 text-[15px] bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition">
+          <UserPlusIcon className="h-5 w-5 inline-block mr-2" />
           Create Account
         </button>
       </div>
 
       {/* Header */}
-      <h1 className='text-4xl text-center font-bold mb-6'>Accounts</h1>
+      <h1 className='text-2xl text-center font-bold mb-6'> <UserIcon className="h-8 w-8 inline-block " /> Accounts</h1>
 
       {/* Desktop Table */}
       <div className="hidden md:block overflow-x-auto">
-        <table className="w-full min-w-max border border-gray-300 table-auto">
+        <table className="w-full min-w-max border border-gray-300 table-auto shadow-md mb-3">
           <thead className="bg-blue-500 text-white">
             <tr>
               <th className="px-4 py-2 text-left text-sm font-semibold">Branch Code</th>
@@ -189,12 +193,13 @@ const handleDeposit = () => {
 
       {/* Account Details Modal */}
       {openModal && selectedAccount && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 ">
           <div className="bg-white p-8 w-[90%] max-w-xl shadow-xl rounded-xl">
             <button
               onClick={() => setOpenModal(false)}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500 mb-4"
             >
+              <ArrowLeftIcon className="h-5 w-5 inline-block mr-2" />
               View All Accounts
             </button>
 
@@ -204,6 +209,7 @@ const handleDeposit = () => {
                 onClick={() => setConfirmDelete(true)}
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-500"
               >
+                <TrashIcon className="h-5 w-5 inline-block mr-2" />
                 Delete Account
               </button>
             </div>
@@ -225,9 +231,11 @@ const handleDeposit = () => {
 
             <div className="flex justify-end gap-4">
               <button onClick={() => setDepositModal(true)} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500">
+                <ArrowUpTrayIcon className="h-5 w-5 inline-block mr-2" />
                 Deposit
               </button>
               <button onClick={() => setWithdrawModal(true)} className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-500">
+                <ArrowDownTrayIcon className="h-5 w-5 inline-block mr-2" />
                 Withdraw
               </button>
             </div>

@@ -46,40 +46,62 @@ function CreateAccount() {
       return;
     }
 
-    try {
-      const existingAccounts =
-        JSON.parse(localStorage.getItem("accounts")) || [];
-      const newAccount = {
-        id: Date.now(),
-        fullName: form.fullName,
-        cnic: form.cnic,
-        branchCode: branchCodeNum,
-        accountNumber: form.accountNumber,
-        accountType: form.accountType,
-        balance: balanceNum,
-        createdAt: new Date().toISOString(),
-      };
+   try {
+  const existingAccounts = JSON.parse(localStorage.getItem("accounts")) || [];
+  const newAccount = {
+    id: Date.now(),
+    fullName: form.fullName,
+    cnic: form.cnic,
+    branchCode: branchCodeNum,
+    accountNumber: form.accountNumber,
+    accountType: form.accountType,
+    balance: balanceNum,
+    createdAt: new Date().toISOString(),
+  };
 
-      localStorage.setItem(
-        "accounts",
-        JSON.stringify([...existingAccounts, newAccount])
-      );
+  // Save account
+  localStorage.setItem(
+    "accounts",
+    JSON.stringify([...existingAccounts, newAccount])
+  );
 
-      console.log("Account created successfully!");
-      setForm({
-        fullName: "",
-        cnic: "",
-        branchCode: "",
-        accountNumber: "",
-        accountType: "savings",
-        balance: "",
-      });
-      navigate('/account');
+  // Save initial transaction
+  const existingTransactions = JSON.parse(localStorage.getItem("transactions")) || [];
+  const initialTransaction = {
+    id: Date.now() + 1,
+    accountNumber: form.accountNumber,
+    accountHolderName: form.fullName,
+    transactionType: "Credit",
+    amount: balanceNum,
+    description: "Initial Deposit",
+    createdAt: new Date().toISOString(),
+  };
+  localStorage.setItem(
+    "transactions",
+    JSON.stringify([...existingTransactions, initialTransaction])
+  );
 
-    } catch (error) {
-      console.error("Error creating account:", error);
-      toast.error("Error creating account: " + error.message);
-    }
+  // Success toast
+  toast.success(
+    `Dear ${form.fullName}, Your bank account has been created successfully against Account #: ${form.accountNumber}`,
+    { position: "top-right", autoClose: 4000 }
+  );
+
+  setForm({
+    fullName: "",
+    cnic: "",
+    branchCode: "",
+    accountNumber: "",
+    accountType: "savings",
+    balance: "",
+  });
+  navigate('/account');
+
+} catch (error) {
+  console.error("Error creating account:", error);
+  toast.error("Error creating account: " + error.message);
+}
+
   };
 
   return (
@@ -87,8 +109,10 @@ function CreateAccount() {
 
 
       <form onSubmit={(e) => e.preventDefault()} className="space-y-6 bg-white p-8 rounded-2xl shadow-2xl">
-        <h1 className="text-3xl font-bold text-center mb-6">Enter Account Details Below</h1>
-        <p className="text-center text-red-500 mb-6">All fields are required *</p>
+        <div className="bg-blue-500 ">
+        <h1 className="text-3xl font-bold text-center mb-6 text-white">Enter Account Details Below</h1>
+        <p className="text-center text-black mb-6">All fields are required *</p>
+        </div>
         {/* Full Name + CNIC */}
         <div className="flex gap-4">
           {/* Full Name */}
@@ -183,7 +207,7 @@ function CreateAccount() {
           <button
             type="button"
             onClick={handleSubmit}
-            className="w-40 bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-500 transition font-semibold"
+            className="w-40 bg-green-600 text-white py-3 rounded-xl hover:bg-green-500 transition font-semibold"
           >
            Create Account
           </button>

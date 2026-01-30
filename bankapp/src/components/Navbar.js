@@ -29,7 +29,7 @@ export default function Navbar() {
 
               {/* Logo */}
               <div className="flex-1 flex items-center justify-center sm:justify-start">
-                <h1 className="text-white font-bold text-xl">BankApp</h1>
+                <h1 className="text-white font-bold text-xl"><Link to="/">BankApp</Link></h1>
               </div>
 
               {/* Desktop Menu */}
