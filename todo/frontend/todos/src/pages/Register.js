@@ -9,6 +9,7 @@ function Register() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -20,7 +21,8 @@ function Register() {
             Toast.error("Password must be at least 6 characters");
             return;
         }
-        axios.post('http://localhost:3000/auth/register', { username, email, password })
+        setLoading(true);
+        axios.post('https://todo-backend--aroobmushtaq786.replit.app/auth/register', { username, email, password })
             .then(response => {
                 console.log('Registration successful:', response.data);
                 Toast.success("Registration successful! Please login.");
@@ -32,6 +34,9 @@ function Register() {
                     ? error.response.data.error
                     : 'Registration failed';
                 Toast.error(errorMessage);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     }
     return (
@@ -77,6 +82,7 @@ function Register() {
                     <p className="text-gray-600 text-sm">At least 6 characters</p>
                     <button
                         type="submit"
+                        disabled={loading}
                         className="mt-1 flex items-center justify-center gap-2 
            bg-gradient-to-r from-[#f5a3c7] to-[#f8d1e3] 
            p-2 rounded-3xl 
@@ -84,8 +90,12 @@ function Register() {
            transition"
 
                     >
-                        <UserPlus size={20} className="text-gray-700" />
-                        Create Account
+                        {loading ? 'Creating account...' : (
+                            <>
+                                <UserPlus size={20} className="text-gray-700" />
+                                Create Account
+                            </>
+                        )}
                     </button>
 
                     <p className="text-center text-sm text-gray-600">Already have an account? <a href="/login" className='text-pink-500'>Sign in</a></p>

@@ -8,6 +8,7 @@ import Toast from '../components/Toast';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,8 +16,8 @@ function Login() {
       Toast.error("Please fill all fields");
       return;
     }
-
-    axios.post('http://localhost:3000/auth/login', { email, password })
+    setLoading(true);
+    axios.post('https://todo-backend--aroobmushtaq786.replit.app/auth/login', { email, password })
       .then(response => {
         console.log('Login successful:', response.data);
         localStorage.setItem('token', response.data.token);
@@ -28,6 +29,9 @@ function Login() {
           ? error.response.data.error
           : 'Login failed';
         Toast.error(errorMessage);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
   return (
@@ -61,6 +65,7 @@ function Login() {
                         </div>
                         <button
                             type="submit"
+                            disabled={loading}
                             className="mt-4 flex items-center justify-center gap-2 
                bg-gradient-to-r from-[#f5a3c7] to-[#f8d1e3] 
                p-2 rounded-3xl 
@@ -68,8 +73,13 @@ function Login() {
                transition"
     
                         >
-                            <LogIn size={20} className="text-gray-700" />
-                            Sign In
+                          {loading ? 'Signing in...' : (
+                            <>
+                              <LogIn size={20} className="text-gray-700" />
+                              Sign In
+                            </>
+                          )}
+                            
                         </button>
     
                         <p className="text-center text-sm text-gray-600">Don't have an account? <a href="/" className='text-pink-500'>Sign up</a></p>

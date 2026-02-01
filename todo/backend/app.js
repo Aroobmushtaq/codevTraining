@@ -1,10 +1,11 @@
-const express = require('express');
+
+import express from 'express';
+import cors from 'cors';
 const app = express();
-const cors = require('cors');
 app.use(cors());
-const authRoutes = require('./routes/auth');
-const todoRoutes = require('./routes/todo');
+import authRoutes from './routes/auth.js';
+import todoRoutes from './routes/todo.js';
 app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/todo', todoRoutes);
-module.exports = app;
+export default app;

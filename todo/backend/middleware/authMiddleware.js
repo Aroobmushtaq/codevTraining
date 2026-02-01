@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 const protect = (req, res, next) => {
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -16,4 +16,4 @@ const protect = (req, res, next) => {
         res.status(401).json({ error: 'Not authorized, no token' });
     }
 };
-module.exports =  protect ;
+export default protect;

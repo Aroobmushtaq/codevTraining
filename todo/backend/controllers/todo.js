@@ -1,7 +1,6 @@
-const express = require('express');
-const Todo = require('../models/todo');
-const protect = require('../middleware/authMiddleware');
 
+import express from 'express';
+import Todo from '../models/todo.js';
 const createTodo = async (req, res) => {
     const { title, dueDate, description, priority, imageUrl, completed } = req.body;
     try {
@@ -60,4 +59,4 @@ const deleteTodo = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
-module.exports = { createTodo, getTodos, updateTodo, deleteTodo };
+export { createTodo, getTodos, updateTodo, deleteTodo };
