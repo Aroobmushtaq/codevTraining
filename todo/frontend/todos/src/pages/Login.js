@@ -21,7 +21,7 @@ function Login() {
       .then(response => {
         console.log('Login successful:', response.data);
         localStorage.setItem('token', response.data.token);
-        navigate('/home');
+        navigate('/');
       })
       .catch(error => {
         console.error('There was an error logging in!', error);
@@ -82,7 +82,7 @@ function Login() {
                             
                         </button>
     
-                        <p className="text-center text-sm text-gray-600">Don't have an account? <a href="/" className='text-pink-500'>Sign up</a></p>
+                        <p className="text-center text-sm text-gray-600">Don't have an account? <a href="/register" className='text-pink-500'>Sign up</a></p>
                     </form>
                 </div>
             </div>

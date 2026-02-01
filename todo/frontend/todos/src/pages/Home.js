@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Toast from '../components/Toast';
-import { PencilIcon, TrashIcon, Plus, Flag, Calendar } from 'lucide-react';
+import { PencilIcon, TrashIcon, Plus, Flag, Calendar,AlertCircle } from 'lucide-react';
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({
@@ -17,6 +17,12 @@ function Home() {
   const [todos, setTodos] = useState([]);
   const [editingTodo, setEditingTodo] = useState(null);
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem('token');
+  useEffect(() => {
+    if (token) {
+      getTodo();
+    }
+  }, [token]);
   // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -139,6 +145,13 @@ function Home() {
       Toast.error("Failed to update todo!", { autoClose: 3000 });
     }
   };
+  if (!token) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-[#f5dbe6] to-[#e5dcef] text-center p-4">
+        <AlertCircle className="w-10 h-10 text-pink-500 mb-4" />
+        <h2 className="text-2xl font-bold text-pink-600 mb-4">Please Login First</h2>
+        </div>
+        );}
   return (
     <div className="bg-gradient-to-r from-[#f5dbe6] to-[#e5dcef] min-h-screen p-4 flex flex-col items-center justify-center gap-4">
       <div className="w-full max-w-3xl mb-6">
@@ -401,18 +414,18 @@ function Home() {
           </div>
         </div>
       )}
-{modalImage && (
-  <div
-    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    onClick={() => setModalImage(null)}
-  >
-    <img
-      src={modalImage}
-      alt="Full view"
-      className="w-96 h-96 object-contain rounded-lg shadow-lg" 
-    />
-  </div>
-)}
+      {modalImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          onClick={() => setModalImage(null)}
+        >
+          <img
+            src={modalImage}
+            alt="Full view"
+            className="w-96 h-96 object-contain rounded-lg shadow-lg"
+          />
+        </div>
+      )}
 
     </div>
   );
