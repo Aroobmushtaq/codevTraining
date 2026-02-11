@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Toast from '../components/Toast';
-import { PencilIcon, TrashIcon, Plus, Flag, Calendar,AlertCircle } from 'lucide-react';
+import { PencilIcon, TrashIcon, Plus, Flag, Calendar, AlertCircle } from 'lucide-react';
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({
@@ -12,10 +12,12 @@ function Home() {
     imageUrl: '',
     completed: false
   });
+  const [deleteModelOpen, setDeleteModalOpen] = useState(false);
   const [modalImage, setModalImage] = useState(null);
   const [imageUploading, setImageUploading] = useState(false);
   const [todos, setTodos] = useState([]);
   const [editingTodo, setEditingTodo] = useState(null);
+  const [todoToDelete, setTodoToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem('token');
   useEffect(() => {
@@ -139,6 +141,15 @@ function Home() {
       console.log('Todo updated:', id);
       await getTodo();
       setIsModalOpen(false);
+      setEditingTodo(null);
+      setForm({
+        title: '',
+        description: '',
+        dueDate: '',
+        priority: 'Low',
+        imageUrl: '',
+        completed: false
+      });
     }
     catch (error) {
       console.error('Error updating todo:', error);
@@ -150,10 +161,11 @@ function Home() {
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-[#f5dbe6] to-[#e5dcef] text-center p-4">
         <AlertCircle className="w-10 h-10 text-pink-500 mb-4" />
         <h2 className="text-2xl font-bold text-pink-600 mb-4">Please Login First</h2>
-        </div>
-        );}
+      </div>
+    );
+  }
   return (
-    <div className="bg-gradient-to-r from-[#f5dbe6] to-[#e5dcef] min-h-screen p-4 flex flex-col items-center justify-center gap-4">
+    <div className="bg-gradient-to-r from-[#f5dbe6] to-[#e5dcef] min-h-screen pt-28 p-4 flex flex-col items-center justify-center gap-4">
       <div className="w-full max-w-3xl mb-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-pink-50 rounded-2xl p-4 shadow-sm text-center">
@@ -221,7 +233,10 @@ function Home() {
                   setIsModalOpen(true);
                 }}
                 />
-                <TrashIcon className="w-5 h-5 text-gray-700 cursor-pointer" onClick={() => deleteTodo(todo._id)} />
+                <TrashIcon className="w-5 h-5 text-gray-700 cursor-pointer" onClick={() => {
+                  setTodoToDelete(todo)
+                  setDeleteModalOpen(true)
+                }} />
               </div>
 
               {todo.imageUrl && (
@@ -236,7 +251,7 @@ function Home() {
               <div className="flex-1">
                 <h3 className={`font-bold text-lg ${todo.completed ? "line-through" : ""
                   }`}>{todo.title}</h3>
-                <p className="text-sm text-gray-600">{todo.description}</p>
+                <p className="text-sm text-gray-600 ">{todo.description}</p>
 
                 <div className="flex gap-3 mt-2 text-sm">
                   <span
@@ -285,7 +300,7 @@ function Home() {
               value={form.title}
               onChange={handleChange}
               placeholder="Title"
-              className="w-full border p-2 rounded mb-2"
+              className="w-full border p-2 rounded mb-3"
             />
 
             <textarea
@@ -293,7 +308,7 @@ function Home() {
               value={form.description}
               onChange={handleChange}
               placeholder="Description"
-              className="w-full border p-2 rounded mb-2"
+              className="w-full border p-2 rounded mb-2 h-10 m-0 resize-none"
             />
 
             <input
@@ -301,14 +316,20 @@ function Home() {
               name="dueDate"
               value={form.dueDate}
               onChange={handleChange}
-              className="w-full border p-2 rounded mb-2"
+              className="w-full border p-2 rounded mb-3"
+              min={
+                editingTodo
+                  ? form.dueDate || new Date().toISOString().split("T")[0]
+                  : new Date().toISOString().split("T")[0]
+              }
+
             />
 
             <select
               name="priority"
               value={form.priority}
               onChange={handleChange}
-              className="w-full border p-2 rounded mb-2"
+              className="w-full border p-2 rounded mb-3"
             >
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
@@ -319,24 +340,25 @@ function Home() {
             <input
               type="file"
               onChange={handleImageUpload}
-              className="w-full mb-2"
+              className="w-full mb-3"
               accept="image/*"
             />
             {imageUploading && <p className="text-sm text-gray-500">Uploading image...</p>}
             {form.imageUrl && (
-              <img src={form.imageUrl} alt="preview" className="w-32 h-32 object-cover mb-2 rounded" />
+              <img src={form.imageUrl} alt="preview" className="w-32 h-32 object-cover mb-3 rounded" />
             )}
 
-            <label className="flex items-center gap-2 mb-4">
-              <input
-                type="checkbox"
-                name="completed"
-                checked={form.completed}
-                onChange={handleChange}
-              />
-              Completed
-            </label>
-
+            {
+              editingTodo && (<label className="flex items-center gap-2 mb-4">
+                <input
+                  type="checkbox"
+                  name="completed"
+                  checked={form.completed}
+                  onChange={handleChange}
+                />
+                Completed
+              </label>)
+            }
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => {
@@ -355,38 +377,6 @@ function Home() {
               >
                 Cancel
               </button>
-
-              {/* <button
-                onClick={async () => {
-                  if (editingTodo) {
-                    await updateTodo(editingTodo._id, form);
-
-                    setIsModalOpen(false);     // ✅ CLOSE MODAL
-                    setEditingTodo(null);      // ✅ RESET EDIT MODE
-                    setForm({                 // ✅ CLEAR FORM
-                      title: '',
-                      description: '',
-                      dueDate: '',
-                      priority: 'Low',
-                      imageUrl: '',
-                      completed: false
-                    });
-                  } else {
-                    createTodo();
-                  }
-                }}
-
-                disabled={imageUploading}
-                className={`px-4 py-2 rounded text-white transition ${imageUploading ? 'bg-gray-400 cursor-not-allowed' : 'bg-pink-500 hover:bg-pink-600'
-                  }`}
-              >
-                {imageUploading
-                  ? 'Uploading Image...'
-                  : editingTodo
-                    ? 'Update'
-                    : 'Add'}
-
-              </button> */}
               <button
                 onClick={async () => {
                   if (editingTodo) {
@@ -426,6 +416,33 @@ function Home() {
           />
         </div>
       )}
+      {
+        deleteModelOpen && todoToDelete && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm text-center">
+              <p className="text-lg mb-4">Are you sure you want to delete this todo?</p>
+              <div className="flex justify-center gap-2">
+                <button
+                  onClick={() => setDeleteModalOpen(false)}
+                  className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    deleteTodo(todoToDelete._id);
+                    setTodoToDelete(null);
+                    setDeleteModalOpen(false);
+                  }}
+                  className="px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600 transition"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      }
 
     </div>
   );
