@@ -34,7 +34,7 @@ const loginUser = async(req,res)=>{
             return res.status(400).json({ message: 'Invalid credentials' });
         }
         // Generate JWT
-        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
         res.json({ token });
     }
     catch(error){
@@ -50,4 +50,25 @@ const getUserProfile = async (req, res) => {
         console.error(error);
     }
 };
-export { registerUser,loginUser,getUserProfile };
+const userUpdateProfile = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (user){
+            user.name = req.body.name || user.name;
+            user.email = req.body.email || user.email;
+            const updatedUser = await user.save();
+            res.json({
+                _id: updatedUser._id,
+                name: updatedUser.name,
+                email: updatedUser.email,
+                role: updatedUser.role
+            });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }} catch (error) {
+        res.status(500).json({ message: 'Server error' });
+        console.error(error);
+    }
+}
+
+export { registerUser,loginUser,getUserProfile,userUpdateProfile };
