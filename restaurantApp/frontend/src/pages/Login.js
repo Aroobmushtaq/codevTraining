@@ -1,8 +1,7 @@
 import axios from 'axios';
 import React from 'react'
-// import todoImage from '../assets/images/df72dca3-882b-48b4-aa4a-0996756b9dd9_removalai_preview.png';
 import { useState } from 'react';
-import { Mail, Lock, LogIn, SmileIcon} from 'lucide-react';
+import { Mail, Lock, LogIn} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Toast from '../components/Toast';
 function Login() {
@@ -17,7 +16,7 @@ function Login() {
       return;
     }
     setLoading(true);
-    axios.post('https://todo-backend--aroobmushtaq786.replit.app/auth/login', { email, password })
+    axios.post('http://localhost:5000/api/users/login', { email, password })
       .then(response => {
         console.log('Login successful:', response.data);
         localStorage.setItem('token', response.data.token);
@@ -37,7 +36,6 @@ function Login() {
   return (
     <div className='bg-[#FAF7F5] min-h-screen flex items-center justify-center p-4'>
                 <div className="bg-white rounded-xl shadow-lg px-10 py-8 transform transition-transform w-full max-w-md">
-                    {/* <img src={todoImage} alt="Register" className="w-36 mb-2 mx-auto animate-float" /> */}
                     <h1 className="  text-2xl font-bold text-center flex items-center justify-center gap-2">Welcome Back</h1>
                     <p className="text-center text-gray-600 text-36">Sign in to your account</p>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4">

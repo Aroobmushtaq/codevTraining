@@ -8,9 +8,11 @@ import reviewRoutes from "./routers/reviewRouter.js";
 import orderRoutes from "./routers/orderRouter.js";
 import favoriteRoutes from "./routers/favoriteRouter.js";
 import reservationRoutes from "./routers/reservationRouter.js";
+import cors from "cors";
 dotenv.config()
 connectDB();
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/cards', cardRoutes);
