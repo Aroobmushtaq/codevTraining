@@ -5,6 +5,7 @@ import Register from './pages/Register';
 import AdminHome from './pages/admin/AdminHome';
 import CustomerHome from './pages/customer/CutomerHome';
 import Toast from './components/Toast';
+import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
   return (
     <>
@@ -12,8 +13,23 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<AdminHome />} />
-          <Route path="/customer" element={<CustomerHome />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute role="admin">
+                <AdminHome />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/customer"
+            element={
+              <ProtectedRoute role="customer">
+                <CustomerHome />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
       <Toast.Container />
