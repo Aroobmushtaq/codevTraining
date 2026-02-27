@@ -6,6 +6,8 @@ import AdminHome from './pages/admin/AdminHome';
 import CustomerHome from './pages/customer/CutomerHome';
 import Toast from './components/Toast';
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminLayout from './components/AdminLayout';
+import Layout from './components/Layout';
 function App() {
   return (
     <>
@@ -13,6 +15,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route element={<AdminLayout />}>
           <Route
             path="/admin"
             element={
@@ -21,7 +24,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          </Route>
+          <Route element={<Layout />}>
           <Route
             path="/customer"
             element={
@@ -30,6 +34,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          </Route>
         </Routes>
       </Router>
       <Toast.Container />
