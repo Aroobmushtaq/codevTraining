@@ -6,15 +6,11 @@ function Navbar() {
     const { token, user, logout } = useContext(AuthContext);
 
     return (
-        <nav className="bg-white shadow-2xl text-black p-3 flex justify-between items-center">
+        <nav className="bg-white shadow-2xl text-black p-2 flex justify-between items-center">
 
             {/* LEFT SIDE */}
             <div>
-                {user?.role === "admin" ? (
-                    <Link to="/admin">Dashboard</Link>
-                ) : (
                     <Link to="/customer">Customer Dashboard</Link>
-                )}
             </div>
 
             {/* RIGHT SIDE */}
