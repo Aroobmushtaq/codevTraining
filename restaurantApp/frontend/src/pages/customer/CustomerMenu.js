@@ -1,6 +1,6 @@
 import React from 'react'
 
-function CutomerHome() {
+function CustomerMenu() {
   return (
     <div>
       
@@ -8,4 +8,4 @@ function CutomerHome() {
   )
 }
 
-export default CutomerHome
+export default CustomerMenu
