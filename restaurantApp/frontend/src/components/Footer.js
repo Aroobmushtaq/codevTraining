@@ -14,7 +14,7 @@ function Footer() {
                         <UtensilsCrossed size={25} className="text-[#EF6E2F] mr-1 inline" />
                         Feast<span className="text-[#EF6E2F]">Flow</span>
                     </h2>
-                    <p className="text-xm text-gray-500">
+                    <p className="text-xs text-gray-500 text-sm">
                         Delivering extraordinary culinary experiences to your doorstep since 2024.
                     </p>
                 </div>
@@ -33,9 +33,9 @@ function Footer() {
                 {/* Contact */}
                 <div>
                     <h3 className="font-semibold mb-4">Contact</h3>
-                    <p className="text-xs text-gray-500"><MapPin size={16} className="mr-2" /> 123 Food Street</p>
-                    <p className="text-xs text-gray-500"><Phone size={16} className="mr-2" /> +91 98765 43210</p>
-                    <p className="text-xs text-gray-500"><Mail  size={16} className="mr-2" /> support@foodhub.com</p>
+                    <p className="flex items-center text-xs text-gray-500"><MapPin size={16} className="mr-2" /> 123 Food Street</p>
+                    <p className="flex items-center text-xs text-gray-500"><Phone size={16} className="mr-2" /> +92 98765 43210</p>
+                    <p className="flex items-center text-xs text-gray-500"><Mail  size={16} className="mr-2" /> support@foodhub.com</p>
                 </div>
 
                 {/* Social */}
