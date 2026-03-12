@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Search, ShoppingCart, Heart} from "lucide-react";
+import { Search, ShoppingCart, Heart } from "lucide-react";
 import CategoryButton from "./components/CategoryButton";
 function CustomerMenu() {
   const [menuItems, setMenuItems] = useState([]);
@@ -114,20 +114,20 @@ function CustomerMenu() {
               key={item._id}
               className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300"
             >
-           <div className="relative">
-    
-    <img
-      src={item.imageUrl}
-      alt={item.name}
-      className="w-full h-52 object-cover"
-    />
+              <div className="relative">
 
-    <Heart
-      size={30}
-      className="absolute top-3 right-3 text-white bg-black/40 p-1 rounded-full"
-    />
+                <img
+                  src={item.imageUrl}
+                  alt={item.name}
+                  className="w-full h-52 object-cover"
+                />
 
-  </div>
+                <Heart
+                  size={30}
+                  className="absolute top-3 right-3 text-white bg-black/40 p-1 rounded-full"
+                />
+
+              </div>
 
               <div className="p-5">
                 <h2 className="text-xl font-semibold">{item.name}</h2>
