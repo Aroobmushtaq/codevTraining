@@ -4,7 +4,7 @@ import { Facebook, Instagram, Twitter, UtensilsCrossed, Phone, Mail , MapPin } f
 
 function Footer() {
     return (
-        <footer className=" pt-12 pb-6 border-t border-gray-300 mt-10"> 
+        <footer className=" pt-12 pb-6 border-t border-gray-300 "> 
 
             <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10">
 

@@ -143,22 +143,30 @@ function CustomerHome() {
           )}
 
         </div>
-<div className="mt-16 bg-[#EF6E2F] p-10 w-full">
+      </div>
+      {/* POPULAR MENU */}
+{/* READY TO ORDER SECTION (OUTSIDE) */}
+<div className=" bg-[#EE792B] p-10 w-full text-center">
   <h2 className="font-serif font-bold text-3xl text-white">
     Ready to Order?
   </h2>
-  <p className="text-white">Get 20% off your first order with code FEAST20. Start your</p>
-<p className="text-white">culinary journey today.</p>
-<Link
-  to="/customer/menu"
-  className="mt-4 inline-block bg-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#E97229] transition"
->
-  Order Now
-  <MoveRight size={16} className="inline-block ml-2 font-semibold" />
-</Link>
-</div>
 
-      </div>
+  <p className="text-white">
+    Get 20% off your first order with code FEAST20. Start your
+  </p>
+
+  <p className="text-white">
+    culinary journey today.
+  </p>
+
+  <Link
+    to="/customer/menu"
+    className="mt-4 inline-block bg-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#e7e6e5] transition"
+  >
+    Order Now
+    <MoveRight size={16} className="inline-block ml-2 font-semibold" />
+  </Link>
+</div>
     </>
   );
 }
