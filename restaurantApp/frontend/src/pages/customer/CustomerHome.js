@@ -4,8 +4,11 @@ import { Truck, MoveRight, Clock, Star, Package, Heart, ShoppingCart, ArrowRight
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useContext } from "react";
+import { CartContext } from "./context/CartContext";
 function CustomerHome() {
   const [menuItems, setMenuItems] = useState([]);
+  const { addToCart } = useContext(CartContext);
   const fetchMenu = async () => {
     const response = await axios.get("http://localhost:5000/api/menu/get");
     setMenuItems(response.data);
@@ -131,7 +134,12 @@ function CustomerHome() {
                       {item.price?.toFixed(2)}
                     </span>
 
-                    <button className="flex items-center gap-1 bg-[#EF6E2F] text-white px-3 py-1.5 rounded-full text-sm hover:bg-[#E97229] transition">
+                    <button
+                      onClick={() => {
+                        console.log("Adding item:", item);
+                        addToCart(item);
+                      }}
+                      className="flex items-center gap-1 bg-[#EF6E2F] text-white px-3 py-1.5 rounded-full text-sm hover:bg-[#E97229] transition">
                       <ShoppingCart size={16} />
                       Add
                     </button>
@@ -145,28 +153,28 @@ function CustomerHome() {
         </div>
       </div>
       {/* POPULAR MENU */}
-{/* READY TO ORDER SECTION (OUTSIDE) */}
-<div className=" bg-[#EE792B] p-10 w-full text-center">
-  <h2 className="font-serif font-bold text-3xl text-white">
-    Ready to Order?
-  </h2>
+      {/* READY TO ORDER SECTION (OUTSIDE) */}
+      <div className=" bg-[#EE792B] p-10 w-full text-center">
+        <h2 className="font-serif font-bold text-3xl text-white">
+          Ready to Order?
+        </h2>
 
-  <p className="text-white">
-    Get 20% off your first order with code FEAST20. Start your
-  </p>
+        <p className="text-white">
+          Get 20% off your first order with code FEAST20. Start your
+        </p>
 
-  <p className="text-white">
-    culinary journey today.
-  </p>
+        <p className="text-white">
+          culinary journey today.
+        </p>
 
-  <Link
-    to="/customer/menu"
-    className="mt-4 inline-block bg-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#e7e6e5] transition"
-  >
-    Order Now
-    <MoveRight size={16} className="inline-block ml-2 font-semibold" />
-  </Link>
-</div>
+        <Link
+          to="/customer/menu"
+          className="mt-4 inline-block bg-white px-6 py-3 rounded-full text-sm font-semibold hover:bg-[#e7e6e5] transition"
+        >
+          Order Now
+          <MoveRight size={16} className="inline-block ml-2 font-semibold" />
+        </Link>
+      </div>
     </>
   );
 }

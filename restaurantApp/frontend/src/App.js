@@ -18,6 +18,8 @@ import CustomerMenu from './pages/customer/CustomerMenu';
 import CustomerReservations from './pages/customer/CustomerReservations';
 import CustomerOrders from './pages/customer/CustomerOrders';
 import CustomerReviews from './pages/customer/CustomerReviews';
+import CustomerCard from './pages/customer/CustomerCard';
+import { CartProvider } from './pages/customer/context/CartContext';
 function App() {
   return (
     <>
@@ -81,7 +83,11 @@ function App() {
               }
             />
           </Route>
-          <Route element={<Layout />}>
+          <Route element={
+            <CartProvider>
+              <Layout />
+            </CartProvider>
+          }>
             <Route
               path="/customer"
               element={
@@ -90,7 +96,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-                <Route
+            <Route
               path="/customer/menu"
               element={
                 <ProtectedRoute role="customer">
@@ -98,7 +104,15 @@ function App() {
                 </ProtectedRoute>
               }
             />
-                <Route
+            <Route
+              path="/customer/cart"
+              element={
+                <ProtectedRoute role="customer">
+                  <CustomerCard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/customer/reservations"
               element={
                 <ProtectedRoute role="customer">
@@ -106,7 +120,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-    <Route
+            <Route
               path="/customer/orders"
               element={
                 <ProtectedRoute role="customer">
@@ -114,7 +128,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-                <Route
+            <Route
               path="/customer/reviews"
               element={
                 <ProtectedRoute role="customer">
