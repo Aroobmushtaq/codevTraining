@@ -14,7 +14,7 @@ export const CartProvider = ({ children }) => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.get("http://localhost:5000/api/cards/items", {
+      const res = await axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/cards/items", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,7 +38,7 @@ export const CartProvider = ({ children }) => {
       const newQuantity = existingItem ? existingItem.quantity + 1 : 1;
 
       const res = await axios.post(
-        "http://localhost:5000/api/cards/add",
+        "https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/cards/add",
         {
           menuItemId: item._id,
           quantity: newQuantity,

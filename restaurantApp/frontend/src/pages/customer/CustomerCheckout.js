@@ -75,7 +75,7 @@ const CheckoutForm = () => {
         paymentMethodId: paymentMethod.id, // send Stripe payment method to backend
       };
 
-      const res = await axios.post("http://localhost:5000/api/orders/", orderPayload, {
+      const res = await axios.post("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/orders/", orderPayload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

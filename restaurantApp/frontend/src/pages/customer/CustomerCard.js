@@ -16,7 +16,7 @@ function CustomerCard() {
       const token = localStorage.getItem("token");
 
       await axios.put(
-        `http://localhost:5000/api/cards/update/${menuItemId}`,
+        `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/cards/update/${menuItemId}`,
         { quantity: newQuantity },
         {
           headers: {
@@ -38,7 +38,7 @@ function CustomerCard() {
       setLoadingId(menuItemId);
       const token = localStorage.getItem("token");
 
-      await axios.delete(`http://localhost:5000/api/cards/delete/${menuItemId}`, {
+      await axios.delete(`https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/cards/delete/${menuItemId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -12,7 +12,7 @@ export const ReservationProvider = ({ children }) => {
   const createReservation = async (data) => {
     try {
       await axios.post(
-        "http://localhost:5000/api/reservations/",
+        "https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reservations/",
         data,
         {
           headers: {
@@ -30,7 +30,7 @@ export const ReservationProvider = ({ children }) => {
   const fetchReservations = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/reservations/my",
+        "https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reservations/my",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -47,7 +47,7 @@ export const ReservationProvider = ({ children }) => {
   const updateReservation = async (id, updatedData) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/reservations/${id}`,
+        `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reservations/${id}`,
         updatedData,
         {
           headers: {

@@ -12,7 +12,7 @@
 //   const { addToCart } = useContext(CartContext);
 //   const { toggleFavorite, isFavorite } = useContext(FavoritesContext);
 //   const fetchMenu = async () => {
-//     const response = await axios.get("http://localhost:5000/api/menu/get");
+//     const response = await axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/menu/get");
 //     setMenuItems(response.data);
 //   };
 
@@ -186,7 +186,7 @@ function CustomerMenu() {
   const { toggleFavorite, isFavorite } = useContext(FavoritesContext);
 
   const fetchMenu = async () => {
-    const res = await axios.get("http://localhost:5000/api/menu/get");
+    const res = await axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/menu/get");
     setMenuItems(res.data);
   };
 
@@ -194,7 +194,7 @@ function CustomerMenu() {
   const fetchReviews = async (menuId) => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/reviews/${menuId}`
+        `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reviews/${menuId}`
       );
 
       setReviews((prev) => ({
@@ -274,7 +274,7 @@ function CustomerMenu() {
               <Heart
                 size={28}
                 onClick={() => toggleFavorite(item._id)}
-                className="absolute top-3 right-3 cursor-pointer"
+                className="absolute top-3 right-3 p-1 rounded-full cursor-pointer bg-black/40"
                 color={isFavorite(item._id) ? "red" : "white"}
                 fill={isFavorite(item._id) ? "red" : "none"}
               />

@@ -6,52 +6,73 @@ const Reservations = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [updatingId, setUpdatingId] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   const token = localStorage.getItem("token");
 
-  // 🎨 Status text colors (like Orders page)
   const statusColors = {
     Pending: "text-yellow-600",
     Confirmed: "text-green-600",
     Cancelled: "text-red-600",
   };
 
-  // ✅ Fetch reservations
-  const fetchReservations = async () => {
-    setLoading(true);
+  // ✅ Fetch reservations (with optional loader)
+  const fetchReservations = async (showLoader = false) => {
+    if (showLoader) setLoading(true);
+
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/reservations/",
+        "https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reservations/",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      setReservations(res.data);
+
+      // ✅ only update if changed (smooth UI)
+      setReservations((prev) => {
+        if (JSON.stringify(prev) !== JSON.stringify(res.data)) {
+          return res.data;
+        }
+        return prev;
+      });
+
     } catch (error) {
-      console.error(error);
       Toast.error("Failed to load reservations");
     } finally {
-      setLoading(false);
+      if (showLoader) setLoading(false);
     }
   };
 
+  // ✅ First load + auto refresh
   useEffect(() => {
-    fetchReservations();
+    fetchReservations(true); // first load with loader
+
+    const interval = setInterval(() => {
+      fetchReservations(false); // silent refresh
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  // ✅ Update status (instant UI update like Orders)
+  // ✅ Close dropdown on outside click
+  useEffect(() => {
+    const handleClick = () => setOpenDropdown(null);
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, []);
+
+  // ✅ Update status
   const updateStatus = async (id, newStatus) => {
     setUpdatingId(id);
     try {
       await axios.put(
-        `http://localhost:5000/api/reservations/${id}/status`,
+        `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reservations/${id}/status`,
         { status: newStatus },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
-      // instant UI update
       setReservations((prev) =>
         prev.map((r) =>
           r._id === id ? { ...r, status: newStatus } : r
@@ -60,33 +81,27 @@ const Reservations = () => {
 
       Toast.success("Status updated");
     } catch (error) {
-      console.error(error);
       Toast.error("Failed to update status");
     } finally {
       setUpdatingId(null);
     }
   };
 
-  if (loading)
-    return (
-      <p className="text-center mt-10">
-        Loading reservations...
-      </p>
-    );
+  if (loading) {
+    return <p className="text-center mt-10">Loading reservations...</p>;
+  }
 
-  if (reservations.length === 0)
+  if (!reservations.length) {
     return (
       <p className="text-center mt-10 text-gray-500">
         No reservations found
       </p>
     );
+  }
 
   return (
     <div className="max-w-7xl mx-auto mt-6 overflow-x-auto">
-      
-      <table className="min-w-full bg-white shadow-md rounded-xl overflow-hidden">
-        
-        {/* HEADER */}
+      <table className="min-w-full bg-white shadow-md rounded-xl">
         <thead className="text-gray-500 border-t">
           <tr>
             <th className="px-4 py-3 text-left text-sm">Customer</th>
@@ -98,69 +113,90 @@ const Reservations = () => {
           </tr>
         </thead>
 
-        {/* BODY */}
         <tbody>
           {reservations.map((reservation, index) => (
             <tr
               key={reservation._id}
-              className={`border-t hover:bg-gray-50 transition ${
+              className={`border-t ${
                 index % 2 === 0 ? "bg-gray-50/40" : "bg-white"
               }`}
             >
-              
-              {/* Customer */}
-              <td className="px-3 py-2 text-sm text-gray-700">
+              <td className="px-3 py-2 text-sm">
                 {reservation.user?.name || "N/A"}
               </td>
 
-              {/* Date */}
-              <td className="px-3 py-2 text-sm text-gray-600">
+              <td className="px-3 py-2 text-sm">
                 {new Date(reservation.date).toLocaleDateString()}
               </td>
 
-              {/* Time */}
-              <td className="px-3 py-2 text-sm text-gray-600">
+              <td className="px-3 py-2 text-sm">
                 {reservation.time}
               </td>
 
-              {/* Guests */}
-              <td className="px-3 py-2 text-sm font-medium text-gray-700">
+              <td className="px-3 py-2 text-sm font-medium">
                 {reservation.guests}
               </td>
 
-              {/* Status (colored text only) */}
+              {/* Status */}
               <td
-                className={`px-3 py-2 text-sm font-semibold ${
-                  statusColors[reservation.status]
-                }`}
+                className={`px-3 py-2 text-sm font-semibold ${statusColors[reservation.status]}`}
               >
                 {reservation.status}
               </td>
 
-              {/* Dropdown */}
+              {/* 🔥 FIXED DROPDOWN BUTTON */}
               <td className="px-3 py-2 text-sm">
-                <select
-                  value={reservation.status}
-                  onChange={(e) =>
-                    updateStatus(
-                      reservation._id,
-                      e.target.value.trim()
-                    )
-                  }
-                  className={`px-2 py-1 rounded text-sm font-semibold border bg-white
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    const rect =
+                      e.currentTarget.getBoundingClientRect();
+
+                    setOpenDropdown({
+                      id: reservation._id,
+                      top: rect.bottom + 5,
+                      left: rect.left,
+                    });
+                  }}
+                  className={`px-3 py-1.5 rounded-lg border cursor-pointer bg-white text-sm font-semibold
                     ${statusColors[reservation.status]}
                   `}
-                  disabled={updatingId === reservation._id}
                 >
-                  <option value="Pending">Pending</option>
-                  <option value="Confirmed">Confirmed</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
+                  {updatingId === reservation._id
+                    ? "Updating..."
+                    : reservation.status}
+                </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {/* 🔥 FLOATING DROPDOWN */}
+      {openDropdown && (
+        <div
+          className="fixed z-[9999] bg-white border rounded-xl shadow-lg w-40"
+          style={{
+            top: openDropdown.top,
+            left: openDropdown.left,
+          }}
+        >
+          {["Pending", "Confirmed", "Cancelled"].map((status) => (
+            <div
+              key={status}
+              onClick={(e) => {
+                e.stopPropagation();
+                updateStatus(openDropdown.id, status);
+                setOpenDropdown(null);
+              }}
+              className="px-3 py-2 hover:bg-orange-100 cursor-pointer text-sm"
+            >
+              {status}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

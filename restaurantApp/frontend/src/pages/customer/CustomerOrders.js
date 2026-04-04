@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Toast from "../../components/Toast";
 
 const CustomerOrders = () => {
   const [orders, setOrders] = useState([]);
@@ -15,7 +16,7 @@ const CustomerOrders = () => {
     try {
       setLoading(true);
 
-      const res = await axios.get("http://localhost:5000/api/orders/my", {
+      const res = await axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/orders/my", {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -31,7 +32,7 @@ const CustomerOrders = () => {
 
           try {
             const reviewRes = await axios.get(
-              `http://localhost:5000/api/reviews/${menuItemId}`,
+              `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reviews/${menuItemId}`,
               { headers: { Authorization: `Bearer ${token}` } }
             );
 
@@ -62,10 +63,32 @@ const CustomerOrders = () => {
     }
   };
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
+  // useEffect(() => {
+  //   fetchOrders();
+  // }, []);
+  const fetchOrdersOnly = async () => {
+  try {
+    const res = await axios.get(
+      "https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/orders/my",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
+    setOrders(res.data); // ✅ ONLY update orders
+  } catch (err) {
+    console.error(err);
+  }
+};
+useEffect(() => {
+  fetchOrders(); // first load (with reviews)
+
+  const interval = setInterval(() => {
+    fetchOrdersOnly(); // only update status
+  }, 5000);
+
+  return () => clearInterval(interval);
+}, []);
   const handleReviewChange = (key, field, value) => {
     setReviewData((prev) => ({
       ...prev,
@@ -80,13 +103,13 @@ const CustomerOrders = () => {
     const key = `${orderId}_${menuItemId}`;
     const { comment, rating } = reviewData[key] || {};
 
-    if (!comment?.trim()) return alert("Please enter a comment!");
+    if (!comment?.trim()) return Toast.error("Please enter a comment!");
 
     try {
       handleReviewChange(key, "loading", true);
 
       await axios.post(
-        `http://localhost:5000/api/reviews/${menuItemId}`,
+        `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reviews/${menuItemId}`,
         { comment, rating: Number(rating), orderId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -94,11 +117,11 @@ const CustomerOrders = () => {
       handleReviewChange(key, "submitted", true);
       handleReviewChange(key, "loading", false);
 
-      alert("Review submitted!");
+      Toast.success("Review submitted!");
     } catch (err) {
       console.error(err);
       handleReviewChange(key, "loading", false);
-      alert(err.response?.data?.message || "Failed to submit review");
+      Toast.error(err.response?.data?.message || "Failed to submit review");
     }
   };
 

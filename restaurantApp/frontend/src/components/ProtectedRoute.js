@@ -7,7 +7,7 @@ function ProtectedRoute({ children }) {
 
   // If no token → go to login
   if (!token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;

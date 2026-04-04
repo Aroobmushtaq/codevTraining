@@ -50,7 +50,7 @@ function Navbar() {
                         </button>
                     ) : (
                         <>
-                            <Link to="/login">Login</Link>
+                            <Link to="/">Login</Link>
                             <Link to="/register">Register</Link>
                         </>
                     )}
@@ -97,7 +97,7 @@ function Navbar() {
                         </button>
                     ) : (
                         <>
-                            <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
+                            <Link to="/" onClick={() => setIsOpen(false)}>Login</Link>
                             <Link to="/register" onClick={() => setIsOpen(false)}>Register</Link>
                         </>
                     )}

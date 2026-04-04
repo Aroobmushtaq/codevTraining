@@ -20,11 +20,11 @@ const Dashboard = () => {
   try {
     const headers = { headers: { Authorization: `Bearer ${token}` } };
     const [orders, users, menu, reviews, reservations] = await Promise.all([
-      axios.get("http://localhost:5000/api/orders/total", headers),
-      axios.get("http://localhost:5000/api/users/total", headers),
-      axios.get("http://localhost:5000/api/menu/total", headers),
-      axios.get("http://localhost:5000/api/reviews/total", headers),
-      axios.get("http://localhost:5000/api/reservations/total", headers),
+      axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/orders/total", headers),
+      axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/users/total", headers),
+      axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/menu/total", headers),
+      axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reviews/total", headers),
+      axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reservations/total", headers),
     ]);
 
     setStats({

@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Mail, Lock, User, UserPlus,  } from 'lucide-react';
+import { Mail, Lock, User, UserPlus, } from 'lucide-react';
 import Toast from '../components/Toast';
 function Register() {
     const [name, setName] = useState('');
@@ -23,23 +23,23 @@ function Register() {
             return;
         }
         setLoading(true);
-        axios.post('http://localhost:5000/api/users/register', { name, email, password, role })
+        axios.post('https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/users/register', { name, email, password, role })
             .then(response => {
                 console.log('Registration successful:', response.data);
                 Toast.success("Registration successful! Please login.");
-                navigate('/login');
+                navigate('/');
             })
             .catch(error => {
-    console.log("FULL ERROR:", error);
-    console.log("BACKEND RESPONSE:", error.response?.data);
+                console.log("FULL ERROR:", error);
+                console.log("BACKEND RESPONSE:", error.response?.data);
 
-    const message =
-        error.response?.data?.error ||
-        error.response?.data?.message ||
-        "Registration failed";
+                const message =
+                    error.response?.data?.error ||
+                    error.response?.data?.message ||
+                    "Registration failed";
 
-    Toast.error(message);
-})
+                Toast.error(message);
+            })
             .finally(() => {
                 setLoading(false);
             });
@@ -142,7 +142,7 @@ function Register() {
                         )}
                     </button>
 
-                    <p className="text-center text-sm text-gray-600">Already have an account? <a href="/login" className='text-[#F97015]'>Sign in</a></p>
+                    <p className="text-center text-sm text-gray-600">Already have an account? <a href="/" className='text-[#F97015]'>Sign in</a></p>
                 </form>
             </div>
         </div>

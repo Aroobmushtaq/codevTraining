@@ -14,7 +14,7 @@ function Review() {
   const fetchReviews = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:5000/api/reviews/", {
+      const res = await axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reviews/", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviews(res.data);
@@ -29,7 +29,7 @@ function Review() {
   // ✅ Delete Review
   const deleteReview = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/reviews/${deleteId}`, {
+      await axios.delete(`https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reviews/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

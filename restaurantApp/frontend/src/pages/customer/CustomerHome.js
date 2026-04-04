@@ -13,13 +13,13 @@ function CustomerHome() {
   const { toggleFavorite, isFavorite } = useContext(FavoritesContext);
   const { addToCart } = useContext(CartContext);
   const fetchMenu = async () => {
-    const response = await axios.get("http://localhost:5000/api/menu/get");
+    const response = await axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/menu/get");
     setMenuItems(response.data);
   };
   const fetchReviews = async (menuId) => {
   try {
     const res = await axios.get(
-      `http://localhost:5000/api/reviews/${menuId}`
+      `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/reviews/${menuId}`
     );
 
     setReviews((prev) => ({
@@ -174,7 +174,7 @@ useEffect(() => {
 
                   <div className="flex items-center justify-between mt-4">
                     <span className="text-lg font-bold text-[#EF6E2F]">
-                      {item.price?.toFixed(2)}
+                      {item.price}
                     </span>
 
                     <button

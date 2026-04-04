@@ -21,7 +21,7 @@ export const FavoritesProvider = ({ children }) => {
       if (!token) return;
 
       const response = await axios.get(
-        "http://localhost:5000/api/favorites/my",
+        "https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/favorites/my",
         getAuthConfig()
       );
 
@@ -47,7 +47,7 @@ export const FavoritesProvider = ({ children }) => {
   const addFavorite = async (itemId) => {
     try {
       await axios.post(
-        `http://localhost:5000/api/favorites/${itemId}`,
+        `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/favorites/${itemId}`,
         {},
         getAuthConfig()
       );
@@ -60,7 +60,7 @@ export const FavoritesProvider = ({ children }) => {
   const removeFavorite = async (itemId) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/favorites/${itemId}`,
+        `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/favorites/${itemId}`,
         getAuthConfig()
       );
 

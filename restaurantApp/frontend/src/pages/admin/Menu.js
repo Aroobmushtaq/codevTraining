@@ -11,14 +11,16 @@ function Menu() {
   const { search } = useContext(MenuContext);
   const [loading, setLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const [formData, setFormData] = useState({
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const initialFormState = {
     name: "",
     description: "",
     price: "",
     category: "",
     imageUrl: "",
     isAvailable: true,
-  });
+  };
+  const [formData, setFormData] = useState(initialFormState);
   const filteredItems = menuItems.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase()) ||
     item.category.toLowerCase().includes(search.toLowerCase())
@@ -40,7 +42,7 @@ function Menu() {
 
       if (selectedId) {
         await axios.put(
-          `http://localhost:5000/api/menu/update/${selectedId}`,
+          `https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/menu/update/${selectedId}`,
           formData,
           {
             headers: {
@@ -52,7 +54,7 @@ function Menu() {
         Toast.success("Menu item updated successfully");
       } else {
         await axios.post(
-          "http://localhost:5000/api/menu/create",
+          "https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/menu/create",
           formData,
           {
             headers: {
@@ -67,6 +69,7 @@ function Menu() {
       fetchMenuItems();
       closeCreate();
       setSelectedId(null);
+      setFormData(initialFormState);
 
     } catch (error) {
       Toast.error("Operation failed");
@@ -105,7 +108,7 @@ function Menu() {
   const deleteMenuItem = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/menu/delete/${id}`, {
+      await axios.delete(`https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/menu/delete/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -120,7 +123,7 @@ function Menu() {
   const fetchMenuItems = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:5000/api/menu/get", {
+      const res = await axios.get("https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/menu/get", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -134,7 +137,7 @@ function Menu() {
   const updateMenuItem = async (id, updatedData) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`http://localhost:5000/api/menu/update/${id}`, updatedData, {
+      await axios.put(`https://forked-serene-livedistro--aroobmushtaq7.replit.app/api/menu/update/${id}`, updatedData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -149,6 +152,7 @@ function Menu() {
   useEffect(() => {
     fetchMenuItems();
   }, []);
+  
   return (
     <>
       {menuItems.length === 0 ? (
@@ -213,7 +217,14 @@ function Menu() {
                       className="  px-3 py-1 rounded-lg transition duration-200 text-gray-500 hover:text-blue-500"
                       onClick={() => {
                         setSelectedId(item._id);
-                        setFormData(item);
+                        setFormData({
+                          name: item.name || "",
+                          description: item.description || "",
+                          price: item.price || "",
+                          category: item.category || "",
+                          imageUrl: item.imageUrl || "",
+                          isAvailable: item.isAvailable ?? true,
+                        });
                         openCreate();
                       }}
                     >
@@ -257,7 +268,7 @@ function Menu() {
                 required
               />
               <label className="text-sm font-medium text-gray-700">Price & Category</label>
-              <div className="grid grid-cols-2 gap-3">
+              {/* <div className="grid grid-cols-2 gap-3">
                 <input
                   type="number"
                   name="price"
@@ -268,21 +279,72 @@ function Menu() {
                   required
                 />
                 <select
-                  name="category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
-                  required
-                >
-                  <option value="">Select Category</option>
-                  <option value="appetizer">Starters</option>
-                  <option value="main_course">Burgers</option>
-                  <option value="dessert">Pizza</option>
-                  <option value="dessert">Salads</option>
-                  <option value="dessert">Dessert</option>
-                  <option value="beverage">Beverage</option>
-                </select>
-              </div>
+  name="category"
+  value={formData.category}
+  onChange={handleChange}
+  className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+  required
+>
+  <option value="">Select Category</option>
+  <option value="appetizer">Starters</option>
+  <option value="burger">Burgers</option>
+  <option value="pizza">Pizza</option>
+  <option value="salad">Salads</option>
+  <option value="dessert">Dessert</option>
+  <option value="beverage">Beverage</option>
+</select>
+              </div> */}
+              <div className="grid grid-cols-2 gap-3">
+  <input
+    type="number"
+    name="price"
+    placeholder="0"
+    value={formData.price}
+    onChange={handleChange}
+    className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-300"
+    required
+  />
+
+  {/* Custom Category Dropdown */}
+  <div className="relative">
+    <div
+      onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+      className="bg-white w-full border px-3 py-2 rounded-lg border-gray-300 
+      focus:outline-none focus:ring-2 focus:ring-orange-300 cursor-pointer"
+    >
+      {formData.category
+        ? formData.category.charAt(0).toUpperCase() + formData.category.slice(1)
+        : "Select Category"}
+    </div>
+
+    {isCategoryOpen && (
+      <div className="absolute z-50 mt-2 w-full max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-xl shadow-lg">
+        {[
+          { label: "Starters", value: "appetizer" },
+          { label: "Burgers", value: "burger" },
+          { label: "Pizza", value: "pizza" },
+          { label: "Salads", value: "salad" },
+          { label: "Dessert", value: "dessert" },
+          { label: "Beverage", value: "beverage" },
+        ].map((item) => (
+          <div
+            key={item.value}
+            onClick={() => {
+              setFormData((prev) => ({
+                ...prev,
+                category: item.value,
+              }));
+              setIsCategoryOpen(false);
+            }}
+            className="px-3 py-2 hover:bg-orange-100 cursor-pointer"
+          >
+            {item.label}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
               <label className="text-sm font-medium text-gray-700">Upload Image</label>
               <input
                 type="file"
@@ -306,7 +368,12 @@ function Menu() {
                 {/* Cancel Button */}
                 <button
                   type="button"
-                  onClick={closeCreate}
+                  onClick={() => {
+                    closeCreate();
+                    setSelectedId(null);
+                    setFormData(initialFormState);
+                    setIsCategoryOpen(false);
+                  }}
                   className="flex-1 bg-white border border-gray-300 hover:bg-[#E97229] hover:text-white text-black py-2 rounded-lg transition duration-200"
                 >
                   Cancel
