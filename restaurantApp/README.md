@@ -1,7 +1,6 @@
 # Restaurant MERN WebApp
 
 🔗 **Live Demo:** https://remarkable-babka-0dbfaa.netlify.app/
-🎥 **Demo Video:** *(Coming Soon)*
 
 ---
 
